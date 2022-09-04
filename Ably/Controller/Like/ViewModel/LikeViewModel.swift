@@ -20,7 +20,7 @@ class LikeViewModel {
     func populateData(){
         self.realmRead() { savedData in
             self.likeListArray.accept(savedData)
-            self.likeListisEmpty.accept(savedData.isEmpty ? true : false )
+            self.likeListisEmpty.accept(savedData.isEmpty ? true : false)
         }
     }
 }

@@ -72,23 +72,34 @@ class HomeViewModel {
                     complete([])
 
                 } else {
-                    let vm = data.goods.map {
-                        return GoodsViewModel(id: $0.id, name: $0.name, image: $0.image, actualPrice: $0.actualPrice, price: $0.price, isNew: $0.isNew, sellCount: $0.sellCount, isLike: false)
-                    }
                     
-                    var beforedata = self.responseDatawithLike.value
-                    for i in vm {
-                        beforedata.append(i)
+                    self.realmRead { savedData in
+                        let vm = data.goods.map { data -> GoodsViewModel in
+                            var a: GoodsViewModel?
+                            if savedData.contains(where: { $0.id == data.id }) {
+                                a = GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: true)
+                            } else {
+                                a = GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
+                            }
+                            guard let a = a else {
+                                return GoodsViewModel(id: 0, name: "", image: "", actualPrice: 0, price: 0, isNew: false, sellCount: 0, isLike: false)
+                            }
+                            return a
+                        }
+                        
+                        var beforedata = self.responseDatawithLike.value
+                        for i in vm {
+                            beforedata.append(i)
+                        }
+                        self.responseDatawithLike.accept(beforedata)
+                        self.isLoading = false
+                        
+                        var returnData: [IndexPath] = []
+                        for i in 0...9 {
+                            returnData.append(IndexPath(row: lastId + i, section: 0))
+                        }
+                        complete(returnData)
                     }
-                    
-                    self.responseDatawithLike.accept(beforedata)
-                    self.isLoading = false
-                    
-                    var returnData: [IndexPath] = []
-                    for i in 0...9 {
-                        returnData.append(IndexPath(row: lastId + i, section: 0))
-                    }
-                    complete(returnData)
                 }
             })
         .disposed(by: disposeBag)

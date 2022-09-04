@@ -11,18 +11,15 @@ import RxCocoa
 
 
 class HomeViewController: UIViewController {
-
-    static var estimateCellH: CGFloat { 130.0 }
     
     let disposeBag = DisposeBag()
     var viewModel = HomeViewModel()
-        
-    lazy var contentCollectionView = HomeView().makeCollectionView()
-
-    private let refresher = UIRefreshControl()
     
+    lazy var contentCollectionView = HomeView().makeCollectionView()
+    let refresher = UIRefreshControl()
     var loadingView: LoadingView?
     var bannerView: BannerView?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,9 +48,7 @@ class HomeViewController: UIViewController {
     @objc func refreshData() {
         viewModel.isFinish = false
         contentCollectionView.refreshControl?.beginRefreshing()
-
         viewModel.populateData()
-        
         contentCollectionView.refreshControl?.endRefreshing()
     }
     
@@ -197,6 +192,6 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: HomeViewController.estimateCellH)
+        return CGSize(width: collectionView.frame.width, height: 130)
     }
 }

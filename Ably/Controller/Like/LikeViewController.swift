@@ -14,7 +14,6 @@ import RealmSwift
 
 class LikeViewController: UIViewController {
 
-    static var estimateCellH: CGFloat { 130.0 }
     let disposeBag = DisposeBag()
     var viewModel = LikeViewModel()
     
@@ -96,6 +95,6 @@ extension LikeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: HomeViewController.estimateCellH)
+        return CGSize(width: collectionView.frame.width, height: 130)
     }
 }
