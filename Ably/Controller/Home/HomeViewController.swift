@@ -111,7 +111,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCollectionViewCell.Id, for: indexPath) as? ItemCollectionViewCell else { return UICollectionViewCell() }
 
         let cellData = viewModel.responseDatawithLike.value[indexPath.row]
-        cell.configure(data: cellData)
+        cell.configureWithHeart(data: cellData)
 
         cell.onClick = { cellData in
             if let data = cellData {

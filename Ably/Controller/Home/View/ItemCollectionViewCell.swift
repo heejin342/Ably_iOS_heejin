@@ -35,6 +35,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         let imageIcon = UIImage(systemName: "heart")?.withTintColor(.systemPink, renderingMode: .alwaysOriginal)
         button.setImage(imageIcon, for: .normal)
+        button.imageView?.contentMode = .scaleToFill
         button.rx.tap.bind { [weak self] in
             self?.onClick!(self?.cellData)
         }.disposed(by: cellDisposeBag)
@@ -112,10 +113,6 @@ class ItemCollectionViewCell: UICollectionViewCell {
         view.backgroundColor = .systemGray6
         return view
     }()
-    
-    @objc func didTabLikeButton() {
-        print("SDKFJH")
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -174,9 +171,9 @@ class ItemCollectionViewCell: UICollectionViewCell {
         }
         
         itemLikeButton.snp.makeConstraints {
-            $0.top.equalTo(itemImageView.snp.top).inset(10)
-            $0.trailing.equalTo(itemImageView.snp.trailing).inset(10)
-            $0.size.equalTo(20)
+            $0.top.equalTo(itemImageView.snp.top).inset(5)
+            $0.trailing.equalTo(itemImageView.snp.trailing).inset(5)
+            $0.size.equalTo(25)
         }
     }
     
@@ -192,15 +189,15 @@ class ItemCollectionViewCell: UICollectionViewCell {
     }
 
     
-    func configure(data: GoodsViewModel) { 
+    func configureWithHeart(data: GoodsViewModel) {
         cellData = data
         
         itemImageView.sd_setImage(with: URL(string: data.image))
         itemPriceLabel.text = "\(data.price)".makeComma
         itemDetailLabel.text = data.name
-        
+
         var discount: CGFloat = 0
-        discount = round(100 - ((CGFloat(data.price) / CGFloat(data.actualPrice)) * 100))
+        discount = round(100 - (CGFloat(data.price) * 100 / CGFloat(data.actualPrice)))
         if discount != 0 {
             saleAndPriceStackView.insertArrangedSubview(itemSaleLabel, at: 0)
         } else {
@@ -222,9 +219,9 @@ class ItemCollectionViewCell: UICollectionViewCell {
         itemBuyCntLabel.text = "\(data.sellCount)".makeComma + "개 구매중"
         
         if data.isLike {
-            itemLikeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            itemLikeButton.setImage(UIImage(systemName: "heart.fill")?.withTintColor(.systemPink, renderingMode: .alwaysOriginal), for: .normal)
         } else {
-            itemLikeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            itemLikeButton.setImage(UIImage(systemName: "heart")?.withTintColor(.systemPink, renderingMode: .alwaysOriginal), for: .normal)
         }
     }
     
@@ -237,14 +234,14 @@ class ItemCollectionViewCell: UICollectionViewCell {
         itemDetailLabel.text = data.name
         
         var discount: CGFloat = 0
-        discount = round(100 - ((CGFloat(data.price) / CGFloat(data.actualPrice)) * 100))
+        discount = round(100 - (CGFloat(data.price) * 100 / CGFloat(data.actualPrice)))
         if discount != 0 {
             saleAndPriceStackView.insertArrangedSubview(itemSaleLabel, at: 0)
         } else {
             itemSaleLabel.removeFromSuperview()
         }
         itemSaleLabel.text = "\(Int(discount))%"
-
+        
         if data.isNew {
             newAndCountStackView.insertArrangedSubview(itemNewChip, at: 0)
         } else {
@@ -256,7 +253,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         } else {
             itemBuyCntLabel.removeFromSuperview()
         }
-        itemBuyCntLabel.text = "\(data.sellCount)".makeComma + "개 구매중"        
+        itemBuyCntLabel.text = "\(data.sellCount)".makeComma + "개 구매중"
     }
 }
 

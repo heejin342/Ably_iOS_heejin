@@ -22,6 +22,8 @@ class HomeViewModel {
     
     var isLoading = false
     var isFinish = false
+    var isFirst = true
+    
     
     let realmManager = LikeListRealmManager.shared
     

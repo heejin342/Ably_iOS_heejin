@@ -36,6 +36,9 @@ class TabBarController: UITabBarController {
         tabBar.tintColor = .systemPink
 
         viewControllers = [homeViewController, likeViewController]
+        
+        let fontAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)]
+        UITabBarItem.appearance().setTitleTextAttributes(fontAttributes, for: .normal)
     }
 }
 
