@@ -25,37 +25,29 @@ class HomeViewModel {
     var isLoading = false
     var isFinish = false
     
+//    let realmManeger = RealmManager.shared.a()
+    
     init() {
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         populateData()
     }
-    
+        
     func populateData(){
         URLRequest.load(resource: resource)
             .subscribe(onNext: { data in
+                self.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
 
-                self.realmRead() { savedData in
-                    self.responseDatawithLike.accept(
-                        data.goods.map { data -> GoodsViewModel in
-                        var a: GoodsViewModel?
-                        if savedData.count > 0 {
-                            if savedData.contains(where: { $0.id == data.id }) {
-                                a = GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: true)
-                            } else {
-                                a = GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
-                            }
-                        } else {
-                            a = GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
+                    let goodViewModel = data.goods.map { data -> GoodsViewModel in
+                        if let likedData = savedData.first(where: { $0.id == data.id }) {
+                            return GoodsViewModel(value: likedData)
                         }
-                            
-                        guard let a = a else {
-                            return GoodsViewModel(id: 0, name: "", image: "", actualPrice: 0, price: 0, isNew: false, sellCount: 0, isLike: false)
-                        }
-                        return a
-                    })
+                        return GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
+                    }
+                    
+                    self.responseDatawithLike.accept(goodViewModel)
                 }
                 self.responseData.accept(data)
-            })
+             })
         .disposed(by: disposeBag)
     }
     
@@ -68,36 +60,27 @@ class HomeViewModel {
                 if data.goods.isEmpty {
                     self.isLoading = false
                     self.isFinish = true
-
                     complete([])
-
-                } else {
                     
-                    self.realmRead { savedData in
-                        let vm = data.goods.map { data -> GoodsViewModel in
-                            var a: GoodsViewModel?
-                            if savedData.contains(where: { $0.id == data.id }) {
-                                a = GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: true)
-                            } else {
-                                a = GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
+                } else {
+                    self.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
+                        let goodViewModel = data.goods.map { data -> GoodsViewModel in
+                            if let likedData = savedData.first(where: { $0.id == data.id }) {
+                                return GoodsViewModel(value: likedData)
                             }
-                            guard let a = a else {
-                                return GoodsViewModel(id: 0, name: "", image: "", actualPrice: 0, price: 0, isNew: false, sellCount: 0, isLike: false)
-                            }
-                            return a
+                            return GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
                         }
                         
                         var beforedata = self.responseDatawithLike.value
-                        for i in vm {
-                            beforedata.append(i)
+                        var returnData: [IndexPath] = []
+
+                        for (index,value) in goodViewModel.enumerated() {
+                            beforedata.append(value)
+                            returnData.append(IndexPath(row: lastId + index, section: 0))
                         }
                         self.responseDatawithLike.accept(beforedata)
                         self.isLoading = false
                         
-                        var returnData: [IndexPath] = []
-                        for i in 0...9 {
-                            returnData.append(IndexPath(row: lastId + i, section: 0))
-                        }
                         complete(returnData)
                     }
                 }
@@ -111,6 +94,17 @@ extension HomeViewModel {
         DispatchQueue.main.async {
             self.savedLike = Array(self.realm.objects(GoodsViewModel.self))
             complete(self.savedLike)
+        }
+    }
+    
+    func realmFindByRange(firstId: Int?, lastId: Int?, _ complete: @escaping ([GoodsViewModel]) -> Void) {
+        if let fId = firstId, let lId = lastId {
+            DispatchQueue.main.async {
+                self.savedLike = Array(self.realm.objects(GoodsViewModel.self).filter("id >= %@ AND id <= %@", fId, lId))
+                complete(self.savedLike)
+            }
+        } else {
+            complete([])
         }
     }
     

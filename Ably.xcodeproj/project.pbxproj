@@ -28,6 +28,7 @@
 		F0C0DCCD28C3A3F2006A69A1 /* LikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCC28C3A3F2006A69A1 /* LikeView.swift */; };
 		F0C0DCD028C3A46B006A69A1 /* LikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */; };
 		F0C0DCD228C42DB7006A69A1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */; };
+		F0C0DD2128C4C894006A69A1 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2028C4C894006A69A1 /* RealmManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		F0C0DCCC28C3A3F2006A69A1 /* LikeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeView.swift; sourceTree = "<group>"; };
 		F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewModel.swift; sourceTree = "<group>"; };
 		F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		F0C0DD2028C4C894006A69A1 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 				F0C0DCB928C248FA006A69A1 /* View */,
 				F0C0DCC328C27D02006A69A1 /* ViewModel */,
 				F0C0DCAD28C23165006A69A1 /* Model */,
+				F0C0DD2028C4C894006A69A1 /* RealmManager.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				F0C0DCB728C24650006A69A1 /* NSbject+Extension.swift in Sources */,
 				F0C0DCB428C24425006A69A1 /* BannerCollectionViewCell.swift in Sources */,
 				F0C0DCCD28C3A3F2006A69A1 /* LikeView.swift in Sources */,
+				F0C0DD2128C4C894006A69A1 /* RealmManager.swift in Sources */,
 				F0C0DCC528C27D1E006A69A1 /* HomeViewModel.swift in Sources */,
 				F0C0DCCB28C3158F006A69A1 /* CellViewModel.swift in Sources */,
 				F0C0DC9828C21CB4006A69A1 /* AppDelegate.swift in Sources */,

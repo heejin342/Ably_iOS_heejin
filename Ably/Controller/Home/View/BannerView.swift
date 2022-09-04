@@ -103,6 +103,8 @@ extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         if isFirstImage || isLastImage {
             currentIndex = isLastImage ? imageArray.count - 2 : 1
             sliderCollectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: false)
+        } else {
+            currentIndex = Int(currentPosition)
         }
 
         resetTimer()
