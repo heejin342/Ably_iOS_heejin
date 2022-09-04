@@ -24,6 +24,7 @@ class HomeView {
             collectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: ItemCollectionViewCell.Id)
             collectionView.backgroundColor = .white
             collectionView.register(BannerView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id)
+            collectionView.register(LoadingView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: LoadingView.Id)
             
             return collectionView
         }()

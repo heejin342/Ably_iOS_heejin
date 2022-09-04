@@ -27,6 +27,7 @@
 		F0C0DCCB28C3158F006A69A1 /* CellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCA28C3158F006A69A1 /* CellViewModel.swift */; };
 		F0C0DCCD28C3A3F2006A69A1 /* LikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCC28C3A3F2006A69A1 /* LikeView.swift */; };
 		F0C0DCD028C3A46B006A69A1 /* LikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */; };
+		F0C0DCD228C42DB7006A69A1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		F0C0DCCA28C3158F006A69A1 /* CellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewModel.swift; sourceTree = "<group>"; };
 		F0C0DCCC28C3A3F2006A69A1 /* LikeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeView.swift; sourceTree = "<group>"; };
 		F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewModel.swift; sourceTree = "<group>"; };
+		F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				F0C0DCB128C24265006A69A1 /* BannerView.swift */,
 				F0C0DCAF28C231B3006A69A1 /* ItemCollectionViewCell.swift */,
 				F0C0DCB328C24425006A69A1 /* BannerCollectionViewCell.swift */,
+				F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 				F0C0DCB228C24265006A69A1 /* BannerView.swift in Sources */,
 				F0C0DC9A28C21CB4006A69A1 /* SceneDelegate.swift in Sources */,
 				F0C0DCC228C26216006A69A1 /* LikeViewController.swift in Sources */,
+				F0C0DCD228C42DB7006A69A1 /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

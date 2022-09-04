@@ -38,6 +38,10 @@ struct Goods: Codable {
     
 }
 
+struct HomeModelOnlyGoods: Codable {
+    var goods: [Goods]
+}
+
 
 class GoodsViewModel: Object {
 //    @Persisted(primaryKey: true) var _id: ObjectId

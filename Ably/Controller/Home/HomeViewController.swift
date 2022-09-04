@@ -20,7 +20,9 @@ class HomeViewController: UIViewController {
     lazy var contentCollectionView = HomeView().makeCollectionView()
 
     private let refresher = UIRefreshControl()
-
+    
+    var loadingView: LoadingView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -46,6 +48,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc func refreshData() {
+        viewModel.isFinish = false
         contentCollectionView.refreshControl?.beginRefreshing()
 
         viewModel.populateData()
@@ -57,7 +60,9 @@ class HomeViewController: UIViewController {
         viewModel.responseDatawithLike
             .asDriver(onErrorDriveWith: .empty())
             .drive(onNext: { data in
-                self.contentCollectionView.reloadData()
+                if data.count == 10 {
+                    self.contentCollectionView.reloadData()
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -75,9 +80,27 @@ class HomeViewController: UIViewController {
         
         let index = beforeData.firstIndex(where: { $0.id == sender.id})
         guard let row = index else {return}
-//        contentCollectionView.reloadItems(at: [IndexPath(row: row, section: 0)])
         contentCollectionView.reloadData()
         viewModel.realmUpdate(at: row, data: sender)
+    }
+    
+    func loadMoreData() {
+        if !viewModel.isLoading {
+            viewModel.isLoading = true
+            DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(2)) {
+                self.viewModel.fetchMoreData(from: self.viewModel.responseDatawithLike.value.last?.id ?? -1) { indexArr in
+                    if !indexArr.isEmpty {
+                        DispatchQueue.main.async {
+                            self.contentCollectionView.insertItems(at: indexArr)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.loadingView?.loadingIndicatorView.stopAnimating()
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -106,15 +129,51 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id , for: indexPath) as? BannerView else { return UICollectionReusableView() }
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id , for: indexPath) as? BannerView else { return UICollectionReusableView() }
 
-        if let data = viewModel.responseData.value?.banners {
-            header.prepare(banners: data)
+            if let data = viewModel.responseData.value?.banners {
+                header.prepare(banners: data)
+            }
+            return header
+            
+        } else if kind == UICollectionView.elementKindSectionFooter {
+
+            guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: LoadingView.Id , for: indexPath) as? LoadingView else { return UICollectionReusableView() }
+            loadingView = footer
+            return footer
         }
         
-        return header
+        return UICollectionReusableView()
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if viewModel.isLoading {
+            return CGSize.zero
+        } else {
+            return CGSize(width: collectionView.frame.width, height: 55)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter && !viewModel.isFinish{
+            self.loadingView?.loadingIndicatorView.startAnimating()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            self.loadingView?.loadingIndicatorView.stopAnimating()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if !viewModel.isFinish {
+            if indexPath.row == viewModel.responseDatawithLike.value.count - 2 && !viewModel.isLoading {
+                loadMoreData()
+            }
+        }
+    }
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
@@ -124,7 +183,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: .zero, left: .zero, bottom: 52, right: .zero)
+        return UIEdgeInsets(top: .zero, left: .zero, bottom: .zero, right: .zero)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

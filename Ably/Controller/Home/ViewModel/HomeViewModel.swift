@@ -22,6 +22,9 @@ class HomeViewModel {
     var responseDatawithLike = BehaviorRelay<[GoodsViewModel]>(value: [])
     var savedLike: [GoodsViewModel] = []
     
+    var isLoading = false
+    var isFinish = false
+    
     init() {
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         populateData()
@@ -52,6 +55,41 @@ class HomeViewModel {
                     })
                 }
                 self.responseData.accept(data)
+            })
+        .disposed(by: disposeBag)
+    }
+    
+    func fetchMoreData(from lastId: Int, _ complete: @escaping ([IndexPath]) -> Void) {
+        let resource2 = Resource<HomeModelOnlyGoods>(url: URL(string: "http://d2bab9i9pr8lds.cloudfront.net/api/home/goods?lastId=\(lastId)")!)
+        
+        URLRequest.load(resource: resource2)
+            .subscribe(onNext: { data in
+
+                if data.goods.isEmpty {
+                    self.isLoading = false
+                    self.isFinish = true
+
+                    complete([])
+
+                } else {
+                    let vm = data.goods.map {
+                        return GoodsViewModel(id: $0.id, name: $0.name, image: $0.image, actualPrice: $0.actualPrice, price: $0.price, isNew: $0.isNew, sellCount: $0.sellCount, isLike: false)
+                    }
+                    
+                    var beforedata = self.responseDatawithLike.value
+                    for i in vm {
+                        beforedata.append(i)
+                    }
+                    
+                    self.responseDatawithLike.accept(beforedata)
+                    self.isLoading = false
+                    
+                    var returnData: [IndexPath] = []
+                    for i in 0...9 {
+                        returnData.append(IndexPath(row: lastId + i, section: 0))
+                    }
+                    complete(returnData)
+                }
             })
         .disposed(by: disposeBag)
     }
