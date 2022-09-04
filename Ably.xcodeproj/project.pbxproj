@@ -29,6 +29,7 @@
 		F0C0DCD028C3A46B006A69A1 /* LikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */; };
 		F0C0DCD228C42DB7006A69A1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */; };
 		F0C0DD2128C4C894006A69A1 /* LikeListRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2028C4C894006A69A1 /* LikeListRealmManager.swift */; };
+		F0C0DD2428C51887006A69A1 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2328C51887006A69A1 /* UIColor+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewModel.swift; sourceTree = "<group>"; };
 		F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		F0C0DD2028C4C894006A69A1 /* LikeListRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListRealmManager.swift; sourceTree = "<group>"; };
+		F0C0DD2328C51887006A69A1 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				F0C0DCB628C24650006A69A1 /* NSbject+Extension.swift */,
 				F0C0DCBB28C24BB6006A69A1 /* URLRequest+Extension.swift */,
 				F0C0DCBF28C25523006A69A1 /* String+Extension.swift */,
+				F0C0DD2328C51887006A69A1 /* UIColor+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				F0C0DC9A28C21CB4006A69A1 /* SceneDelegate.swift in Sources */,
 				F0C0DCC228C26216006A69A1 /* LikeViewController.swift in Sources */,
 				F0C0DCD228C42DB7006A69A1 /* LoadingView.swift in Sources */,
+				F0C0DD2428C51887006A69A1 /* UIColor+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

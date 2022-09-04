@@ -32,7 +32,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     lazy var itemLikeButton: UIButton = {
         let button = UIButton()
-        let imageIcon = UIImage(systemName: "heart")?.withTintColor(.systemPink, renderingMode: .alwaysOriginal)
+        let imageIcon = UIImage(systemName: "heart")?.withTintColor(.pointColor, renderingMode: .alwaysOriginal)
         button.setImage(imageIcon, for: .normal)
         button.imageView?.contentMode = .scaleToFill
         button.rx.tap.bind { [weak self] in
@@ -46,13 +46,13 @@ class ItemCollectionViewCell: UICollectionViewCell {
         let stackView = UIStackView()
         stackView.backgroundColor = .white
         stackView.axis = .horizontal
-        stackView.spacing = 8
+        stackView.spacing = 7
         return stackView
     }()
 
     private lazy var itemSaleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .systemPink
+        label.textColor = .pointColor
         label.font = .boldSystemFont(ofSize: 15)
         label.text = "00%"
         return label
@@ -60,7 +60,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
 
     private lazy var itemPriceLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .primaryTextColor
         label.font = .boldSystemFont(ofSize: 15)
         label.text = "10,000"
         return label
@@ -68,7 +68,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     private lazy var itemDetailLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .gray
+        label.textColor = .secondaryLabel
         label.font = .systemFont(ofSize: 12)
         label.text = "상품 설명"
         label.numberOfLines = 0
@@ -94,7 +94,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     
     private lazy var itemNewChipLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .primaryTextColor
         label.font = .systemFont(ofSize: 9)
         label.text = "NEW"
         return label
@@ -102,7 +102,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
 
     private lazy var itemBuyCntLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .gray
+        label.textColor = .secondaryLabel
         label.font = .systemFont(ofSize: 11)
         label.text = "100개 구매중"
         return label
@@ -217,9 +217,9 @@ class ItemCollectionViewCell: UICollectionViewCell {
         itemBuyCntLabel.text = "\(data.sellCount)".makeComma + "개 구매중"
         
         if data.isLike {
-            itemLikeButton.setImage(UIImage(systemName: "heart.fill")?.withTintColor(.systemPink, renderingMode: .alwaysOriginal), for: .normal)
+            itemLikeButton.setImage(UIImage(systemName: "heart.fill")?.withTintColor(.pointColor, renderingMode: .alwaysOriginal), for: .normal)
         } else {
-            itemLikeButton.setImage(UIImage(systemName: "heart")?.withTintColor(.systemPink, renderingMode: .alwaysOriginal), for: .normal)
+            itemLikeButton.setImage(UIImage(systemName: "heart")?.withTintColor(.pointColor, renderingMode: .alwaysOriginal), for: .normal)
         }
     }
     

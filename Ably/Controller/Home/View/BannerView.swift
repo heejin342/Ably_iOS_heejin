@@ -26,7 +26,7 @@ class BannerView: UICollectionReusableView {
         view.delegate = self
         view.dataSource = self
         view.isPagingEnabled = true
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .white
         view.register(BannerCollectionViewCell.self, forCellWithReuseIdentifier: BannerCollectionViewCell.Id)

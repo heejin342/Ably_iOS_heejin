@@ -33,7 +33,7 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
 
         tabBar.backgroundColor = .white
-        tabBar.tintColor = .systemPink
+        tabBar.tintColor = .pointColor
 
         viewControllers = [homeViewController, likeViewController]
         

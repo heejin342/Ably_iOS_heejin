@@ -5,7 +5,6 @@
 //  Created by 김희진 on 2022/09/04.
 //
 
-import Foundation
 import Realm
 import RealmSwift
 
@@ -43,7 +42,7 @@ class LikeListRealmManager {
             } else {
                 let taskToDelete = realm.objects(GoodsViewModel.self).filter("id == %@", data.id)
                 realm.delete(taskToDelete)
-             }
+            }
         }
     }
     
@@ -61,5 +60,4 @@ class LikeListRealmManager {
             } catch {}
         }
     }
-
 }
