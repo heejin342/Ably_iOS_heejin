@@ -8,34 +8,31 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import Realm
-import RealmSwift
 
 class HomeViewModel {
 
-    let realm = try! Realm()
 
     let resource = Resource<HomeModel>(url: URL(string: "http://d2bab9i9pr8lds.cloudfront.net/api/home")!)
     let disposeBag = DisposeBag()
     
     let responseData = BehaviorRelay<HomeModel?>(value: nil)
+    
+    var responseBannerData = BehaviorRelay<[Banners]>(value: [])
     var responseDatawithLike = BehaviorRelay<[GoodsViewModel]>(value: [])
-    var savedLike: [GoodsViewModel] = []
     
     var isLoading = false
     var isFinish = false
     
-//    let realmManeger = RealmManager.shared.a()
+    let realmManager = LikeListRealmManager.shared
     
     init() {
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
         populateData()
     }
         
     func populateData(){
         URLRequest.load(resource: resource)
             .subscribe(onNext: { data in
-                self.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
+                self.realmManager.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
 
                     let goodViewModel = data.goods.map { data -> GoodsViewModel in
                         if let likedData = savedData.first(where: { $0.id == data.id }) {
@@ -46,7 +43,8 @@ class HomeViewModel {
                     
                     self.responseDatawithLike.accept(goodViewModel)
                 }
-                self.responseData.accept(data)
+//                self.responseData.accept(data)
+                self.responseBannerData.accept(data.banners)
              })
         .disposed(by: disposeBag)
     }
@@ -63,7 +61,7 @@ class HomeViewModel {
                     complete([])
                     
                 } else {
-                    self.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
+                    self.realmManager.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
                         let goodViewModel = data.goods.map { data -> GoodsViewModel in
                             if let likedData = savedData.first(where: { $0.id == data.id }) {
                                 return GoodsViewModel(value: likedData)
@@ -89,48 +87,3 @@ class HomeViewModel {
     }
 }
 
-extension HomeViewModel {
-    func realmRead(_ complete: @escaping ([GoodsViewModel]) -> Void) {
-        DispatchQueue.main.async {
-            self.savedLike = Array(self.realm.objects(GoodsViewModel.self))
-            complete(self.savedLike)
-        }
-    }
-    
-    func realmFindByRange(firstId: Int?, lastId: Int?, _ complete: @escaping ([GoodsViewModel]) -> Void) {
-        if let fId = firstId, let lId = lastId {
-            DispatchQueue.main.async {
-                self.savedLike = Array(self.realm.objects(GoodsViewModel.self).filter("id >= %@ AND id <= %@", fId, lId))
-                complete(self.savedLike)
-            }
-        } else {
-            complete([])
-        }
-    }
-    
-    func realmUpdate(data: GoodsViewModel){
-        try! realm.write {
-            if data.isLike {
-                realm.add(data)
-            } else {
-                let taskToDelete = realm.objects(GoodsViewModel.self).filter("id == %@", data.id)
-                realm.delete(taskToDelete)
-             }
-        }
-    }
-    
-    func realmDeleteSchema(){
-        let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
-        let realmURLs = [
-                realmURL,
-                realmURL.appendingPathExtension("lock"),
-                realmURL.appendingPathExtension("note"),
-                realmURL.appendingPathExtension("management")
-            ]
-        for URL in realmURLs {
-            do {
-                try FileManager.default.removeItem(at: URL)
-            } catch {}
-        }
-    }
-}

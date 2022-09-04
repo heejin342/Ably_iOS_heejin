@@ -77,7 +77,7 @@ class HomeViewController: UIViewController {
         
         viewModel.responseDatawithLike.accept(beforeData)
         contentCollectionView.reloadData()
-        viewModel.realmUpdate(data: newData)
+        LikeListRealmManager.shared.realmUpdate(data: newData)
     }
     
     func loadMoreData() {
@@ -127,13 +127,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id , for: indexPath) as? BannerView else { return UICollectionReusableView() }
             
             bannerView = header
-            if let data = viewModel.responseData.value?.banners {
-                if !data.isEmpty {
-                    var newDataArray = data
-                    newDataArray.insert(data[data.count-1], at: 0)
-                    newDataArray.append(data[0])
-                    header.prepare(banners: newDataArray)
-                }
+            if !viewModel.responseBannerData.value.isEmpty {
+                let beforeData = viewModel.responseBannerData.value
+                var newDataArray = beforeData
+                newDataArray.insert(beforeData[beforeData.count-1], at: 0)
+                newDataArray.append(beforeData[0])
+                header.prepare(banners: newDataArray)
             }
             return header
             
@@ -183,7 +182,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 300)
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.width * 0.7)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

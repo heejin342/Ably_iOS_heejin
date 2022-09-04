@@ -12,23 +12,16 @@ import Realm
 import RealmSwift
 
 class LikeViewModel {
-
-    let realm = try! Realm()
+    
     var likeListArray = BehaviorRelay<[GoodsViewModel]>(value: [])
     var likeListisEmpty = BehaviorRelay<Bool>(value: true)
+    
+    let realmManager = LikeListRealmManager.shared
 
     func populateData(){
-        self.realmRead() { savedData in
-            self.likeListArray.accept(savedData)
+        realmManager.realmRead() { savedData in
+            self.likeListArray.accept(savedData.reversed())
             self.likeListisEmpty.accept(savedData.isEmpty ? true : false)
-        }
-    }
-}
-
-extension LikeViewModel {
-    func realmRead(_ complete: @escaping ([GoodsViewModel]) -> Void) {
-        DispatchQueue.main.async {
-            complete(Array(self.realm.objects(GoodsViewModel.self)))
         }
     }
 }
