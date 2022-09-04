@@ -114,12 +114,11 @@ extension HomeViewModel {
         }
     }
     
-    func realmUpdate(at item: Int, data: GoodsViewModel){
-        let taskToUpdate = self.responseDatawithLike.value[item]
+    func realmUpdate(data: GoodsViewModel){
         try! realm.write {
-            if taskToUpdate.isLike { // 안좋아요에서 좋아요 됨
-                realm.add(taskToUpdate)
-            } else { // 좋아요에서 안좋아요로 됨
+            if data.isLike {
+                realm.add(data)
+            } else {
                 let taskToDelete = realm.objects(GoodsViewModel.self).filter("id == %@", data.id)
                 realm.delete(taskToDelete)
              }

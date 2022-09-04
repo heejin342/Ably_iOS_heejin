@@ -9,7 +9,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-
 class HomeViewController: UIViewController {
     
     let disposeBag = DisposeBag()
@@ -65,34 +64,33 @@ class HomeViewController: UIViewController {
     
     func changeButtonUI(sender: GoodsViewModel) {
         var beforeData = viewModel.responseDatawithLike.value
+        let newData = GoodsViewModel(value: sender)
+        
         beforeData = beforeData.map {
             if $0.id == sender.id {
-                return GoodsViewModel(id: $0.id, name: $0.name, image: $0.image, actualPrice: $0.actualPrice, price: $0.price, isNew: $0.isNew, sellCount: $0.sellCount, isLike: !$0.isLike)
-            } else {
-                return GoodsViewModel(id: $0.id, name: $0.name, image: $0.image, actualPrice: $0.actualPrice, price: $0.price, isNew: $0.isNew, sellCount: $0.sellCount, isLike: $0.isLike)
+                newData.isLike = !sender.isLike
+                return newData
             }
+            
+            return $0
         }
-        viewModel.responseDatawithLike.accept(beforeData)
         
-        let index = beforeData.firstIndex(where: { $0.id == sender.id})
-        guard let row = index else {return}
+        viewModel.responseDatawithLike.accept(beforeData)
         contentCollectionView.reloadData()
-        viewModel.realmUpdate(at: row, data: sender)
+        viewModel.realmUpdate(data: newData)
     }
     
     func loadMoreData() {
         if !viewModel.isLoading {
             viewModel.isLoading = true
-            DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(2)) {
-                self.viewModel.fetchMoreData(from: self.viewModel.responseDatawithLike.value.last?.id ?? -1) { indexArr in
-                    if !indexArr.isEmpty {
-                        DispatchQueue.main.async {
-                            self.contentCollectionView.insertItems(at: indexArr)
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            self.loadingView?.loadingIndicatorView.stopAnimating()
-                        }
+            self.viewModel.fetchMoreData(from: self.viewModel.responseDatawithLike.value.last?.id ?? -1) { indexArr in
+                if !indexArr.isEmpty {
+                    DispatchQueue.main.async {
+                        self.contentCollectionView.insertItems(at: indexArr)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.loadingView?.loadingIndicatorView.stopAnimating()
                     }
                 }
             }
@@ -129,11 +127,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id , for: indexPath) as? BannerView else { return UICollectionReusableView() }
             
             bannerView = header
-            if var data = viewModel.responseData.value?.banners {
+            if let data = viewModel.responseData.value?.banners {
                 if !data.isEmpty {
-//                    data.insert(data[data.count-1], at: 0)
-//                    data.append(data[1])
-                    header.prepare(banners: data)
+                    var newDataArray = data
+                    newDataArray.insert(data[data.count-1], at: 0)
+                    newDataArray.append(data[0])
+                    header.prepare(banners: newDataArray)
                 }
             }
             return header

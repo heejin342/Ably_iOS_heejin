@@ -12,7 +12,7 @@ import RxSwift
 class BannerView: UICollectionReusableView {
     var timer: Timer?
 
-    var currentIndex = 0
+    var currentIndex = 1
     var imageArray: [Banners] = []
     private let disposeBag = DisposeBag()
     
@@ -49,25 +49,25 @@ class BannerView: UICollectionReusableView {
 
     func prepare(banners: [Banners]) {
         imageArray = banners
-        sliderCollectionView.reloadData()
+        if !banners.isEmpty {
+            sliderCollectionView.reloadData()
+            sliderCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: false)
+        }
     }
     
     func initTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(pageValueDidChanged), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(pageValueDidChanged), userInfo: nil, repeats: false)
+        
     }
     
     
     func resetTimer() {
         timer?.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(pageValueDidChanged), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(pageValueDidChanged), userInfo: nil, repeats: false)
     }
-    
+
     @objc func pageValueDidChanged() {
-        if currentIndex < imageArray.count - 1 {
-            currentIndex += 1
-        } else {
-            currentIndex = 0
-        }
+        currentIndex += 1
         sliderCollectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: true)
         
         resetTimer()
@@ -86,7 +86,7 @@ extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
 
         let data = imageArray[indexPath.row]
         
-        cell.configure(banner: data, totalCount: imageArray.count)
+        cell.configure(banner: data, totalCount: imageArray.count - 2)
         
         return cell
     }
@@ -96,10 +96,18 @@ extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        currentIndex = Int(scrollView.contentOffset.x / sliderCollectionView.frame.size.width)
+        let currentPosition = scrollView.contentOffset.x / sliderCollectionView.frame.size.width
+        let isFirstImage = Int(currentPosition) == imageArray.count - 1
+        let isLastImage = currentPosition <= 0
+        
+        if isFirstImage || isLastImage {
+            currentIndex = isLastImage ? imageArray.count - 2 : 1
+            sliderCollectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: false)
+        }
+
         resetTimer()
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
        return 0
     }
