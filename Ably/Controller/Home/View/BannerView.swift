@@ -10,7 +10,8 @@ import RxCocoa
 import RxSwift
 
 class BannerView: UICollectionReusableView {
-    
+    var timer: Timer?
+
     var currentIndex = 0
     var imageArray: [Banners] = []
     private let disposeBag = DisposeBag()
@@ -40,7 +41,6 @@ class BannerView: UICollectionReusableView {
         sliderCollectionView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview()
         }
-//        sliderCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: true)
     }
   
     required init?(coder: NSCoder) {
@@ -51,9 +51,30 @@ class BannerView: UICollectionReusableView {
         imageArray = banners
         sliderCollectionView.reloadData()
     }
+    
+    func initTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(pageValueDidChanged), userInfo: nil, repeats: false)
+    }
+    
+    
+    func resetTimer() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(pageValueDidChanged), userInfo: nil, repeats: false)
+    }
+    
+    @objc func pageValueDidChanged() {
+        if currentIndex < imageArray.count - 1 {
+            currentIndex += 1
+        } else {
+            currentIndex = 0
+        }
+        sliderCollectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: true)
+        
+        resetTimer()
+    }
 }
 
-extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageArray.count
@@ -61,11 +82,11 @@ extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionViewCell.Id, for: indexPath) as! BannerCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionViewCell.Id, for: indexPath) as? BannerCollectionViewCell else { return UICollectionViewCell() }
+
         let data = imageArray[indexPath.row]
         
-        cell.configure(banner: data)
-                
+        cell.configure(banner: data, totalCount: imageArray.count)
         
         return cell
     }
@@ -76,10 +97,10 @@ extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         currentIndex = Int(scrollView.contentOffset.x / sliderCollectionView.frame.size.width)
-//        pageLabel.text = "\(currentIndex + 1)/\(imageArray.count)"
+        resetTimer()
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-           return 0
+       return 0
     }
 }

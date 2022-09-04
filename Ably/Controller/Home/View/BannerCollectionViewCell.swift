@@ -18,14 +18,19 @@ class BannerCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    lazy var pageLabelView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray
+        view.layer.cornerRadius = 12
+        return view
+    }()
+    
     lazy var pageLabel: UILabel = {
         let label = UILabel()
-//        label.text = "\(currentIndex + 1)/\(imageArray.count)"
-//        label.textColor = .grey60
-//        label.font =  UIFont(name: Font.regular, size: 15)
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .white
         return label
     }()
-
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,24 +42,24 @@ class BannerCollectionViewCell: UICollectionViewCell {
     }
 
     private func addSubviews() {
-        contentView.addSubview(imageView)
-        contentView.addSubview(pageLabel)
-        imageView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
+        [imageView, pageLabelView].forEach { contentView.addSubview($0) }
+        imageView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        pageLabel.snp.makeConstraints { make in
-            make.trailing.bottom.equalToSuperview().inset(20)
+        pageLabelView.snp.makeConstraints {
+            $0.trailing.bottom.equalToSuperview().inset(20)
+            $0.height.equalTo(24)
+            $0.width.equalTo(45)
+        }
+        pageLabelView.addSubview(pageLabel)
+        pageLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
 
-    func configure(banner: Banners) {
-        pageLabel.text = "\(banner.id)"
-
-        let _url = URL(string: banner.image)
-        let data2 = try? Data(contentsOf: _url!)
-                        
-        imageView.image = UIImage(data: data2!)
-
+    func configure(banner: Banners, totalCount: Int) {
+        pageLabel.text = "\(banner.id)/\(totalCount)"
+        imageView.sd_setImage(with: URL(string: banner.image))
     }
 }

@@ -22,6 +22,7 @@ class HomeViewController: UIViewController {
     private let refresher = UIRefreshControl()
     
     var loadingView: LoadingView?
+    var bannerView: BannerView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,9 +132,14 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
         if kind == UICollectionView.elementKindSectionHeader {
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id , for: indexPath) as? BannerView else { return UICollectionReusableView() }
-
-            if let data = viewModel.responseData.value?.banners {
-                header.prepare(banners: data)
+            
+            bannerView = header
+            if var data = viewModel.responseData.value?.banners {
+                if !data.isEmpty {
+//                    data.insert(data[data.count-1], at: 0)
+//                    data.append(data[1])
+                    header.prepare(banners: data)
+                }
             }
             return header
             
@@ -158,12 +164,16 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
         if elementKind == UICollectionView.elementKindSectionFooter && !viewModel.isFinish{
             self.loadingView?.loadingIndicatorView.startAnimating()
+        } else if elementKind == UICollectionView.elementKindSectionHeader {
+            self.bannerView?.initTimer()
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
         if elementKind == UICollectionView.elementKindSectionFooter {
             self.loadingView?.loadingIndicatorView.stopAnimating()
+        } else if elementKind == UICollectionView.elementKindSectionHeader {
+            self.bannerView?.timer?.invalidate()
         }
     }
     
