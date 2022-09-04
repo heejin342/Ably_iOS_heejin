@@ -11,7 +11,6 @@ import UIKit
 class LikeView {
     
     func makeCollectionView() -> UICollectionView {
-
         let likeCollectionView: UICollectionView = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
@@ -26,6 +25,17 @@ class LikeView {
         }()
         
         return likeCollectionView
+    }
+    
+    func makeEmptyLabel() -> UILabel {
+        let emptyLabel: UILabel = {
+            let label = UILabel()
+            label.text = "좋아요한 상품이 없습니다"
+            label.font = .systemFont(ofSize: 15)
+            return label
+        }()
+        
+        return emptyLabel
     }
     
 }

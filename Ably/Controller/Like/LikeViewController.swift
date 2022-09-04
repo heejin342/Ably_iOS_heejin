@@ -17,8 +17,11 @@ class LikeViewController: UIViewController {
     static var estimateCellH: CGFloat { 130.0 }
     let disposeBag = DisposeBag()
     var viewModel = LikeViewModel()
+    
+    let likeView = LikeView()
         
-    lazy var likeCollectionView = LikeView().makeCollectionView()
+    lazy var likeCollectionView = likeView.makeCollectionView()
+    lazy var emptyLabel = likeView.makeEmptyLabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +57,20 @@ class LikeViewController: UIViewController {
                 self.likeCollectionView.reloadData()
             })
             .disposed(by: disposeBag)
+        
+        viewModel.likeListisEmpty.subscribe(onNext: {
+            if $0 {
+                self.likeCollectionView.addSubview(self.emptyLabel)
+                self.emptyLabel.snp.makeConstraints {
+                    $0.center.equalToSuperview()
+                }
+                
+            } else {
+                self.emptyLabel.removeFromSuperview()
+            }
+        })
+        .disposed(by: disposeBag)
+        
     }
 }
 
