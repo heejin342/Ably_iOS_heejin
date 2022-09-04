@@ -51,7 +51,7 @@ class BannerView: UICollectionReusableView {
         imageArray = banners
         if !banners.isEmpty {
             sliderCollectionView.reloadData()
-            sliderCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: false)
+            sliderCollectionView.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: [.centeredVertically, .centeredHorizontally], animated: false)
         }
     }
     

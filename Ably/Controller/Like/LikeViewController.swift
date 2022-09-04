@@ -18,7 +18,6 @@ class LikeViewController: UIViewController {
     var viewModel = LikeViewModel()
     
     let likeView = LikeView()
-        
     lazy var likeCollectionView = likeView.makeCollectionView()
     lazy var emptyLabel = likeView.makeEmptyLabel()
 
@@ -63,7 +62,6 @@ class LikeViewController: UIViewController {
                 self.emptyLabel.snp.makeConstraints {
                     $0.center.equalToSuperview()
                 }
-                
             } else {
                 self.emptyLabel.removeFromSuperview()
             }
@@ -73,9 +71,7 @@ class LikeViewController: UIViewController {
     }
 }
 
-
 extension LikeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.likeListArray.value.count
     }

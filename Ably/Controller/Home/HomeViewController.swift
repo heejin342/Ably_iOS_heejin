@@ -19,7 +19,6 @@ class HomeViewController: UIViewController {
     var loadingView: LoadingView?
     var bannerView: BannerView?
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -46,6 +45,7 @@ class HomeViewController: UIViewController {
     
     @objc func refreshData() {
         viewModel.isFinish = false
+        bannerView?.resetTimer()
         contentCollectionView.refreshControl?.beginRefreshing()
         viewModel.populateData()
         contentCollectionView.refreshControl?.endRefreshing()
@@ -62,13 +62,13 @@ class HomeViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    func changeButtonUI(sender: GoodsViewModel) {
+    func changeButtonUI(with senderData: GoodsViewModel) {
         var beforeData = viewModel.responseDatawithLike.value
-        let newData = GoodsViewModel(value: sender)
+        let newData = GoodsViewModel(value: senderData)
         
         beforeData = beforeData.map {
-            if $0.id == sender.id {
-                newData.isLike = !sender.isLike
+            if $0.id == senderData.id {
+                newData.isLike = !senderData.isLike
                 return newData
             }
             
@@ -83,13 +83,12 @@ class HomeViewController: UIViewController {
     func loadMoreData() {
         if !viewModel.isLoading {
             viewModel.isLoading = true
-            self.viewModel.fetchMoreData(from: self.viewModel.responseDatawithLike.value.last?.id ?? -1) { indexArr in
-                if !indexArr.isEmpty {
-                    DispatchQueue.main.async {
+            let lastItemId = self.viewModel.responseDatawithLike.value.last?.id ?? -1
+            self.viewModel.fetchMoreData(from: lastItemId) { indexArr in
+                DispatchQueue.main.async {
+                    if !indexArr.isEmpty {
                         self.contentCollectionView.insertItems(at: indexArr)
-                    }
-                } else {
-                    DispatchQueue.main.async {
+                    } else {
                         self.loadingView?.loadingIndicatorView.stopAnimating()
                     }
                 }
@@ -101,10 +100,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
-        let cellData = viewModel.responseDatawithLike.value
-
-        return cellData.count
+        return viewModel.responseDatawithLike.value.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -115,15 +111,16 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
 
         cell.onClick = { cellData in
             if let data = cellData {
-                self.changeButtonUI(sender: data)
+                self.changeButtonUI(with: data)
             }
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-
-        if kind == UICollectionView.elementKindSectionHeader {
+        switch kind {
+            
+        case UICollectionView.elementKindSectionHeader :
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id , for: indexPath) as? BannerView else { return UICollectionReusableView() }
             
             bannerView = header
@@ -136,14 +133,14 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             }
             return header
             
-        } else if kind == UICollectionView.elementKindSectionFooter {
-
+        case UICollectionView.elementKindSectionFooter :
             guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: LoadingView.Id , for: indexPath) as? LoadingView else { return UICollectionReusableView() }
             loadingView = footer
             return footer
+            
+        default:
+            return UICollectionReusableView()
         }
-        
-        return UICollectionReusableView()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
@@ -155,10 +152,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-        if elementKind == UICollectionView.elementKindSectionFooter && !viewModel.isFinish{
+        if elementKind == UICollectionView.elementKindSectionFooter && !viewModel.isFinish {
             self.loadingView?.loadingIndicatorView.startAnimating()
         } else if elementKind == UICollectionView.elementKindSectionHeader {
-            self.bannerView?.initTimer()
+            self.bannerView?.resetTimer()
         }
     }
 
@@ -172,7 +169,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if !viewModel.isFinish {
-            if indexPath.row == viewModel.responseDatawithLike.value.count - 2 && !viewModel.isLoading {
+            if indexPath.row == viewModel.responseDatawithLike.value.count - 1 && !viewModel.isLoading {
                 loadMoreData()
             }
         }

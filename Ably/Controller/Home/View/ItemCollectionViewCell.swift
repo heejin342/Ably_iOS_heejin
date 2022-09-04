@@ -12,14 +12,13 @@ import RxSwift
 
 class ItemCollectionViewCell: UICollectionViewCell {
 
-    var cellData: GoodsViewModel!
+    var cellData: GoodsViewModel?
 
     var onClick: ((GoodsViewModel?) -> Void)?
     let cellDisposeBag = DisposeBag()
 
     var frameView: UIView = {
         let view = UIView()
-        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -37,7 +36,8 @@ class ItemCollectionViewCell: UICollectionViewCell {
         button.setImage(imageIcon, for: .normal)
         button.imageView?.contentMode = .scaleToFill
         button.rx.tap.bind { [weak self] in
-            self?.onClick!(self?.cellData)
+            guard let onClick = self?.onClick else { return }
+            onClick(self?.cellData)
         }.disposed(by: cellDisposeBag)
         return button
     }()
@@ -120,10 +120,10 @@ class ItemCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(frameView)
         [itemImageView, saleAndPriceStackView, itemDetailLabel, newAndCountStackView, divideView, itemLikeButton].forEach{ frameView.addSubview($0) }
 
-        setup()
+        setupUI()
     }
     
-    func setup() {
+    func setupUI() {
         frameView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
             $0.width.equalTo(contentView.frame.width)
@@ -177,11 +177,9 @@ class ItemCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    
     required init?(coder: NSCoder) {
         fatalError()
     }
-        
         
     override func prepareForReuse() {
         super.prepareForReuse()

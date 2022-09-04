@@ -35,7 +35,6 @@ struct Goods: Codable {
         case sellCount = "sell_count"
         case id, name, image
     }
-    
 }
 
 struct HomeModelOnlyGoods: Codable {
@@ -44,9 +43,7 @@ struct HomeModelOnlyGoods: Codable {
 
 
 class GoodsViewModel: Object {
-//    @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var id: Int = -1
-//    @Persisted var id: String = ""
     @Persisted var name: String = ""
     @Persisted var image: String = ""
     @Persisted var actualPrice: Int = 0
@@ -68,30 +65,6 @@ class GoodsViewModel: Object {
     }
 }
 
-
-//struct HealthVideo: Codable {
-//    var exerciseContentList: [ExerciseContentList]?
-//    var biomakerCategoryInfoList: [BiomakerCategoryInfoList]?
-//
-//    enum CodingKeys: String, CodingKey {
-//        case exerciseContentList = "exercise_content_list"
-//        case biomakerCategoryInfoList = "biomaker_category_info_list"
-//    }
-//}
-//
-//struct ExerciseContentList: Codable {
-//    let orderNo: Int
-//    let diseaseType: Int?
-//    let diseaseName: String?
-//    let contents: [ContentsDetailList]
-//
-//    enum CodingKeys: String, CodingKey {
-//        case orderNo = "order_no"
-//        case diseaseType = "disease_type"
-//        case diseaseName = "disease_name"
-//        case contents = "contents"
-//    }
-//}
 
 
 //struct ArticleListViewModel {

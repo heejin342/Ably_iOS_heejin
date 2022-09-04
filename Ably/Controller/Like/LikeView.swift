@@ -23,7 +23,6 @@ class LikeView {
             collectionView.backgroundColor = .white
             return collectionView
         }()
-        
         return likeCollectionView
     }
     
@@ -34,7 +33,6 @@ class LikeView {
             label.font = .systemFont(ofSize: 15)
             return label
         }()
-        
         return emptyLabel
     }
     

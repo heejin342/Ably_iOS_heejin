@@ -16,10 +16,8 @@ class LikeViewModel {
     var likeListArray = BehaviorRelay<[GoodsViewModel]>(value: [])
     var likeListisEmpty = BehaviorRelay<Bool>(value: true)
     
-    let realmManager = LikeListRealmManager.shared
-
     func populateData(){
-        realmManager.realmRead() { savedData in
+        LikeListRealmManager.shared.realmRead() { savedData in
             self.likeListArray.accept(savedData.reversed())
             self.likeListisEmpty.accept(savedData.isEmpty ? true : false)
         }
