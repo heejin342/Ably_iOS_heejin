@@ -35,6 +35,16 @@ class LikeListRealmManager {
         }
     }
     
+    func realmFindByRange2(firstId: Int, lastId: Int, _ complete: @escaping ([GoodsViewModel]) -> Void) {
+
+        var returnData: [GoodsViewModel] = []
+
+        DispatchQueue.main.async {
+            returnData = Array(self.realm.objects(GoodsViewModel.self).filter("id >= %@ AND id <= %@", firstId, lastId))
+            complete(returnData)
+        }
+    }
+    
     func realmUpdate(data: GoodsViewModel){
         try! realm.write {
             if data.isLike {

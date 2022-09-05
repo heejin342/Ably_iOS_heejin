@@ -24,12 +24,14 @@
 		F0C0DCC228C26216006A69A1 /* LikeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCC128C26216006A69A1 /* LikeViewController.swift */; };
 		F0C0DCC528C27D1E006A69A1 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCC428C27D1E006A69A1 /* HomeViewModel.swift */; };
 		F0C0DCC928C311CA006A69A1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCC828C311CA006A69A1 /* HomeView.swift */; };
-		F0C0DCCB28C3158F006A69A1 /* CellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCA28C3158F006A69A1 /* CellViewModel.swift */; };
 		F0C0DCCD28C3A3F2006A69A1 /* LikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCC28C3A3F2006A69A1 /* LikeView.swift */; };
 		F0C0DCD028C3A46B006A69A1 /* LikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */; };
 		F0C0DCD228C42DB7006A69A1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */; };
 		F0C0DD2128C4C894006A69A1 /* LikeListRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2028C4C894006A69A1 /* LikeListRealmManager.swift */; };
 		F0C0DD2428C51887006A69A1 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2328C51887006A69A1 /* UIColor+Extension.swift */; };
+		F0C0DD2C28C60E04006A69A1 /* AblyKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2B28C60E04006A69A1 /* AblyKey.swift */; };
+		F0C0DD2F28C616D8006A69A1 /* HomeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2E28C616D8006A69A1 /* HomeUseCase.swift */; };
+		F0C0DD3228C61DCB006A69A1 /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD3128C61DCB006A69A1 /* HomeRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,12 +56,14 @@
 		F0C0DCC128C26216006A69A1 /* LikeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewController.swift; sourceTree = "<group>"; };
 		F0C0DCC428C27D1E006A69A1 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F0C0DCC828C311CA006A69A1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		F0C0DCCA28C3158F006A69A1 /* CellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewModel.swift; sourceTree = "<group>"; };
 		F0C0DCCC28C3A3F2006A69A1 /* LikeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeView.swift; sourceTree = "<group>"; };
 		F0C0DCCF28C3A46B006A69A1 /* LikeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewModel.swift; sourceTree = "<group>"; };
 		F0C0DCD128C42DB7006A69A1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		F0C0DD2028C4C894006A69A1 /* LikeListRealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListRealmManager.swift; sourceTree = "<group>"; };
 		F0C0DD2328C51887006A69A1 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		F0C0DD2B28C60E04006A69A1 /* AblyKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AblyKey.swift; sourceTree = "<group>"; };
+		F0C0DD2E28C616D8006A69A1 /* HomeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUseCase.swift; sourceTree = "<group>"; };
+		F0C0DD3128C61DCB006A69A1 /* HomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,7 @@
 		F0C0DC9628C21CB4006A69A1 /* Ably */ = {
 			isa = PBXGroup;
 			children = (
+				F0C0DD2A28C60DE3006A69A1 /* APIKey */,
 				F0C0DCC728C2E646006A69A1 /* Resources */,
 				F0C0DCA528C21CB6006A69A1 /* Info.plist */,
 				F0C0DD2228C4E78F006A69A1 /* RealmManager */,
@@ -154,7 +159,9 @@
 			isa = PBXGroup;
 			children = (
 				F0C0DC9B28C21CB4006A69A1 /* HomeViewController.swift */,
+				F0C0DD3028C61D9B006A69A1 /* Repositiory */,
 				F0C0DCB928C248FA006A69A1 /* View */,
+				F0C0DD2D28C616A7006A69A1 /* UseCase */,
 				F0C0DCC328C27D02006A69A1 /* ViewModel */,
 				F0C0DCAD28C23165006A69A1 /* Model */,
 			);
@@ -187,7 +194,6 @@
 			isa = PBXGroup;
 			children = (
 				F0C0DCC428C27D1E006A69A1 /* HomeViewModel.swift */,
-				F0C0DCCA28C3158F006A69A1 /* CellViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -217,6 +223,30 @@
 				F0C0DD2028C4C894006A69A1 /* LikeListRealmManager.swift */,
 			);
 			path = RealmManager;
+			sourceTree = "<group>";
+		};
+		F0C0DD2A28C60DE3006A69A1 /* APIKey */ = {
+			isa = PBXGroup;
+			children = (
+				F0C0DD2B28C60E04006A69A1 /* AblyKey.swift */,
+			);
+			path = APIKey;
+			sourceTree = "<group>";
+		};
+		F0C0DD2D28C616A7006A69A1 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				F0C0DD2E28C616D8006A69A1 /* HomeUseCase.swift */,
+			);
+			path = UseCase;
+			sourceTree = "<group>";
+		};
+		F0C0DD3028C61D9B006A69A1 /* Repositiory */ = {
+			isa = PBXGroup;
+			children = (
+				F0C0DD3128C61DCB006A69A1 /* HomeRepository.swift */,
+			);
+			path = Repositiory;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,12 +372,14 @@
 				F0C0DCBE28C24F0A006A69A1 /* HomeModel.swift in Sources */,
 				F0C0DCBC28C24BB6006A69A1 /* URLRequest+Extension.swift in Sources */,
 				F0C0DCB728C24650006A69A1 /* NSbject+Extension.swift in Sources */,
+				F0C0DD2C28C60E04006A69A1 /* AblyKey.swift in Sources */,
+				F0C0DD3228C61DCB006A69A1 /* HomeRepository.swift in Sources */,
 				F0C0DCB428C24425006A69A1 /* BannerCollectionViewCell.swift in Sources */,
 				F0C0DCCD28C3A3F2006A69A1 /* LikeView.swift in Sources */,
 				F0C0DD2128C4C894006A69A1 /* LikeListRealmManager.swift in Sources */,
 				F0C0DCC528C27D1E006A69A1 /* HomeViewModel.swift in Sources */,
-				F0C0DCCB28C3158F006A69A1 /* CellViewModel.swift in Sources */,
 				F0C0DC9828C21CB4006A69A1 /* AppDelegate.swift in Sources */,
+				F0C0DD2F28C616D8006A69A1 /* HomeUseCase.swift in Sources */,
 				F0C0DCB228C24265006A69A1 /* BannerView.swift in Sources */,
 				F0C0DC9A28C21CB4006A69A1 /* SceneDelegate.swift in Sources */,
 				F0C0DCC228C26216006A69A1 /* LikeViewController.swift in Sources */,

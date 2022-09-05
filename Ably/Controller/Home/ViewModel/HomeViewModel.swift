@@ -12,7 +12,6 @@ import RxCocoa
 class HomeViewModel {
 
 
-    let resource = Resource<HomeModel>(url: URL(string: "http://d2bab9i9pr8lds.cloudfront.net/api/home")!)
     let disposeBag = DisposeBag()
     
     let responseData = BehaviorRelay<HomeModel?>(value: nil)
@@ -23,7 +22,8 @@ class HomeViewModel {
     var isLoading = false
     var isFinish = false
     var isFirst = true
-    
+
+    let useCase = HomeUseCase()
     
     let realmManager = LikeListRealmManager.shared
     
@@ -32,56 +32,41 @@ class HomeViewModel {
     }
         
     func populateData(){
-        URLRequest.load(resource: resource)
+        
+        useCase.getHomeData()
             .subscribe(onNext: { data in
-                self.realmManager.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
-
-                    let goodViewModel = data.goods.map { data -> GoodsViewModel in
-                        if let likedData = savedData.first(where: { $0.id == data.id }) {
-                            return GoodsViewModel(value: likedData)
-                        }
-                        return GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
-                    }
+                self.useCase.getLikedData(firstId: data.goods.first?.id, lastId: data.goods.last?.id, data: data.goods) { returnData in
                     
-                    self.responseDatawithLike.accept(goodViewModel)
+                    self.responseDatawithLike.accept(returnData)
+                    self.responseBannerData.accept(data.banners)
                 }
-//                self.responseData.accept(data)
-                self.responseBannerData.accept(data.banners)
-             })
+            })
         .disposed(by: disposeBag)
     }
     
     func fetchMoreData(from lastId: Int, _ complete: @escaping ([IndexPath]) -> Void) {
-        let resource2 = Resource<HomeModelOnlyGoods>(url: URL(string: "http://d2bab9i9pr8lds.cloudfront.net/api/home/goods?lastId=\(lastId)")!)
         
-        URLRequest.load(resource: resource2)
+        useCase.getMoreGoodData(param: lastId)
             .subscribe(onNext: { data in
-
+                
                 if data.goods.isEmpty {
                     self.isLoading = false
                     self.isFinish = true
                     complete([])
-                    
                 } else {
-                    self.realmManager.realmFindByRange(firstId: data.goods.first?.id, lastId: data.goods.last?.id) { savedData in
-                        let goodViewModel = data.goods.map { data -> GoodsViewModel in
-                            if let likedData = savedData.first(where: { $0.id == data.id }) {
-                                return GoodsViewModel(value: likedData)
-                            }
-                            return GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
-                        }
+                    self.useCase.getLikedData(firstId: data.goods.first?.id, lastId: data.goods.last?.id, data: data.goods) { returnData in
                         
                         var beforedata = self.responseDatawithLike.value
-                        var returnData: [IndexPath] = []
+                        var updateIndexPath: [IndexPath] = []
 
-                        for (index,value) in goodViewModel.enumerated() {
+                        for (index,value) in returnData.enumerated() {
                             beforedata.append(value)
-                            returnData.append(IndexPath(row: lastId + index, section: 0))
+                            updateIndexPath.append(IndexPath(row: lastId + index, section: 0))
                         }
                         self.responseDatawithLike.accept(beforedata)
                         self.isLoading = false
-                        
-                        complete(returnData)
+
+                        complete(updateIndexPath)
                     }
                 }
             })

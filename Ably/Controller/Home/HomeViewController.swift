@@ -84,12 +84,16 @@ class HomeViewController: UIViewController {
         if !viewModel.isLoading {
             viewModel.isLoading = true
             let lastItemId = self.viewModel.responseDatawithLike.value.last?.id ?? -1
-            self.viewModel.fetchMoreData(from: lastItemId) { indexArr in
-                DispatchQueue.main.async {
-                    if !indexArr.isEmpty {
-                        self.contentCollectionView.insertItems(at: indexArr)
-                    } else {
-                        self.loadingView?.loadingIndicatorView.stopAnimating()
+            
+            DispatchQueue.global().async {
+                sleep(2)
+                self.viewModel.fetchMoreData(from: lastItemId) { indexArr in
+                    DispatchQueue.main.async {
+                        if !indexArr.isEmpty {
+                            self.contentCollectionView.insertItems(at: indexArr)
+                        } else {
+                            self.loadingView?.loadingIndicatorView.stopAnimating()
+                        }
                     }
                 }
             }
