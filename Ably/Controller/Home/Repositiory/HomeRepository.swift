@@ -24,8 +24,8 @@ class HomeRepository {
         }
     }
     
-    func getHomeMoreGoods(params: Int) -> Single<HomeModelOnlyGoods> {
-        let resource = Resource<HomeModelOnlyGoods>(url: URL(string: AblyKey.urlString + AblyRequest.Home.goods + "\(params)")!)
+    func getHomeMoreGoods(params: Int) -> Single<HomeGoodsModel> {
+        let resource = Resource<HomeGoodsModel>(url: URL(string: AblyKey.urlString + AblyRequest.Home.goods + "\(params)")!)
         
         return Single.create { single in
             URLRequest.load(resource: resource)

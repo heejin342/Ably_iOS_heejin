@@ -11,22 +11,17 @@ import RxCocoa
 
 class HomeViewModel {
 
-
     let disposeBag = DisposeBag()
-    
+    let useCase = HomeUseCase()
+
     let responseData = BehaviorRelay<HomeModel?>(value: nil)
     
-    var responseBannerData = BehaviorRelay<[Banners]>(value: [])
-    var responseDatawithLike = BehaviorRelay<[GoodsViewModel]>(value: [])
+    var bannerData = BehaviorRelay<[Banners]>(value: [])
+    var goodsData = BehaviorRelay<[GoodsViewModel]>(value: [])
     
     var isLoading = false
     var isFinish = false
-    var isFirst = true
 
-    let useCase = HomeUseCase()
-    
-    let realmManager = LikeListRealmManager.shared
-    
     init() {
         populateData()
     }
@@ -37,16 +32,27 @@ class HomeViewModel {
             .subscribe(onNext: { data in
                 self.useCase.getLikedData(firstId: data.goods.first?.id, lastId: data.goods.last?.id, data: data.goods) { returnData in
                     
-                    self.responseDatawithLike.accept(returnData)
-                    self.responseBannerData.accept(data.banners)
+                    self.goodsData.accept(returnData)
+                    
+                    if !data.banners.isEmpty {
+                        let baner = data.banners
+                        var newBannerArray = baner
+                        newBannerArray.insert(baner[baner.count-1], at: 0)
+                        newBannerArray.append(baner[0])
+                        self.bannerData.accept(newBannerArray)
+                    } else {
+                        self.bannerData.accept(data.banners)
+                    }
                 }
             })
         .disposed(by: disposeBag)
     }
     
-    func fetchMoreData(from lastId: Int, _ complete: @escaping ([IndexPath]) -> Void) {
+    func fetchMoreData(_ complete: @escaping ([IndexPath]) -> Void) {
+    
+        let lastItemId = goodsData.value.last?.id ?? -1
         
-        useCase.getMoreGoodData(param: lastId)
+        useCase.getMoreGoodData(param: lastItemId)
             .subscribe(onNext: { data in
                 
                 if data.goods.isEmpty {
@@ -56,14 +62,14 @@ class HomeViewModel {
                 } else {
                     self.useCase.getLikedData(firstId: data.goods.first?.id, lastId: data.goods.last?.id, data: data.goods) { returnData in
                         
-                        var beforedata = self.responseDatawithLike.value
+                        var beforedata = self.goodsData.value
                         var updateIndexPath: [IndexPath] = []
 
                         for (index,value) in returnData.enumerated() {
                             beforedata.append(value)
-                            updateIndexPath.append(IndexPath(row: lastId + index, section: 0))
+                            updateIndexPath.append(IndexPath(row: lastItemId + index, section: 0))
                         }
-                        self.responseDatawithLike.accept(beforedata)
+                        self.goodsData.accept(beforedata)
                         self.isLoading = false
 
                         complete(updateIndexPath)

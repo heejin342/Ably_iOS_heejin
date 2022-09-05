@@ -23,20 +23,8 @@ class LikeListRealmManager {
             complete(returnData)
         }
     }
-    
-    func realmFindByRange(firstId: Int?, lastId: Int?, _ complete: @escaping ([GoodsViewModel]) -> Void) {
-        if let fId = firstId, let lId = lastId {
-            DispatchQueue.main.async {
-                let returnData = Array(self.realm.objects(GoodsViewModel.self).filter("id >= %@ AND id <= %@", fId, lId))
-                complete(returnData)
-            }
-        } else {
-            complete([])
-        }
-    }
-    
-    func realmFindByRange2(firstId: Int, lastId: Int, _ complete: @escaping ([GoodsViewModel]) -> Void) {
-
+        
+    func realmFindByRange(firstId: Int, lastId: Int, _ complete: @escaping ([GoodsViewModel]) -> Void) {
         var returnData: [GoodsViewModel] = []
 
         DispatchQueue.main.async {

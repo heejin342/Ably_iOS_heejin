@@ -85,9 +85,7 @@ extension BannerView: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCollectionViewCell.Id, for: indexPath) as? BannerCollectionViewCell else { return UICollectionViewCell() }
 
         let data = imageArray[indexPath.row]
-        
-        cell.configure(banner: data, totalCount: imageArray.count - 2)
-        
+        cell.configure(banner: data, totalCount: imageArray.count - 2)        
         return cell
     }
 

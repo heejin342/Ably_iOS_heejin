@@ -52,10 +52,10 @@ class HomeViewController: UIViewController {
     }
     
     func bindUI(_ viewModel: HomeViewModel) {
-        viewModel.responseDatawithLike
+        viewModel.goodsData
             .asDriver(onErrorDriveWith: .empty())
-            .drive(onNext: { data in
-                if data.count == 10 {
+            .drive(onNext: {
+                if $0.count == 10 {
                     self.contentCollectionView.reloadData()
                 }
             })
@@ -63,37 +63,32 @@ class HomeViewController: UIViewController {
     }
     
     func changeButtonUI(with senderData: GoodsViewModel) {
-        var beforeData = viewModel.responseDatawithLike.value
-        let newData = GoodsViewModel(value: senderData)
+        var goodsData = viewModel.goodsData.value
+        let updatedData = GoodsViewModel(value: senderData)
         
-        beforeData = beforeData.map {
+        goodsData = goodsData.map {
             if $0.id == senderData.id {
-                newData.isLike = !senderData.isLike
-                return newData
+                updatedData.isLike = !senderData.isLike
+                return updatedData
             }
-            
             return $0
         }
         
-        viewModel.responseDatawithLike.accept(beforeData)
+        viewModel.goodsData.accept(goodsData)
         contentCollectionView.reloadData()
-        LikeListRealmManager.shared.realmUpdate(data: newData)
+        LikeListRealmManager.shared.realmUpdate(data: updatedData)
     }
     
     func loadMoreData() {
         if !viewModel.isLoading {
             viewModel.isLoading = true
-            let lastItemId = self.viewModel.responseDatawithLike.value.last?.id ?? -1
             
-            DispatchQueue.global().async {
-                sleep(2)
-                self.viewModel.fetchMoreData(from: lastItemId) { indexArr in
-                    DispatchQueue.main.async {
-                        if !indexArr.isEmpty {
-                            self.contentCollectionView.insertItems(at: indexArr)
-                        } else {
-                            self.loadingView?.loadingIndicatorView.stopAnimating()
-                        }
+            self.viewModel.fetchMoreData() { indexArr in
+                DispatchQueue.main.async {
+                    if !indexArr.isEmpty {
+                        self.contentCollectionView.insertItems(at: indexArr)
+                    } else {
+                        self.loadingView?.loadingIndicatorView.stopAnimating()
                     }
                 }
             }
@@ -104,13 +99,13 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.responseDatawithLike.value.count
+        return viewModel.goodsData.value.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCollectionViewCell.Id, for: indexPath) as? ItemCollectionViewCell else { return UICollectionViewCell() }
 
-        let cellData = viewModel.responseDatawithLike.value[indexPath.row]
+        let cellData = viewModel.goodsData.value[indexPath.row]
         cell.configureWithHeart(data: cellData)
 
         cell.onClick = { cellData in
@@ -128,13 +123,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id , for: indexPath) as? BannerView else { return UICollectionReusableView() }
             
             bannerView = header
-            if !viewModel.responseBannerData.value.isEmpty {
-                let beforeData = viewModel.responseBannerData.value
-                var newDataArray = beforeData
-                newDataArray.insert(beforeData[beforeData.count-1], at: 0)
-                newDataArray.append(beforeData[0])
-                header.prepare(banners: newDataArray)
-            }
+            header.prepare(banners: viewModel.bannerData.value)
             return header
             
         case UICollectionView.elementKindSectionFooter :
@@ -173,7 +162,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if !viewModel.isFinish {
-            if indexPath.row == viewModel.responseDatawithLike.value.count - 1 && !viewModel.isLoading {
+            if indexPath.row == viewModel.goodsData.value.count - 1 && !viewModel.isLoading {
                 loadMoreData()
             }
         }

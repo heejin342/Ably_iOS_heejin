@@ -30,7 +30,7 @@ class HomeUseCase {
     func getLikedData(firstId: Int?, lastId: Int?, data: [Goods], _ complete: @escaping ([GoodsViewModel]) -> Void) {
 
         if let fId = firstId, let lId = lastId {
-            self.realmManager.realmFindByRange2(firstId: fId, lastId: lId) { savedData in
+            self.realmManager.realmFindByRange(firstId: fId, lastId: lId) { savedData in
                let returnData = data.map { data -> GoodsViewModel in
                     if let likedData = savedData.first(where: { $0.id == data.id }) {
                         return GoodsViewModel(value: likedData)
@@ -45,8 +45,8 @@ class HomeUseCase {
         }
     }
     
-    func getMoreGoodData(param: Int) -> Observable<HomeModelOnlyGoods> {
-        return Observable<HomeModelOnlyGoods>.create { emit in
+    func getMoreGoodData(param: Int) -> Observable<HomeGoodsModel> {
+        return Observable<HomeGoodsModel>.create { emit in
             self.repository.getHomeMoreGoods(params: param).subscribe { event in
                 switch event {
                 case .success(let data):
@@ -58,5 +58,4 @@ class HomeUseCase {
         }
     }
 
-    
 }

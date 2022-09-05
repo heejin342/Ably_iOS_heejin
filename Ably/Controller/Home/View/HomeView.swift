@@ -20,7 +20,6 @@ class HomeView {
             layout.minimumLineSpacing = 0
 
             let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//            collectionView.contentInsetAdjustmentBehavior = .always
             collectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: ItemCollectionViewCell.Id)
             collectionView.backgroundColor = .white
             collectionView.register(BannerView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BannerView.Id)
