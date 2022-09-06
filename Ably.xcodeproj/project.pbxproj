@@ -32,6 +32,7 @@
 		F0C0DD2C28C60E04006A69A1 /* AblyKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2B28C60E04006A69A1 /* AblyKey.swift */; };
 		F0C0DD2F28C616D8006A69A1 /* HomeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD2E28C616D8006A69A1 /* HomeUseCase.swift */; };
 		F0C0DD3228C61DCB006A69A1 /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD3128C61DCB006A69A1 /* HomeRepository.swift */; };
+		F0C0DD3628C7428F006A69A1 /* HomeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C0DD3528C7428F006A69A1 /* HomeService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		F0C0DD2B28C60E04006A69A1 /* AblyKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AblyKey.swift; sourceTree = "<group>"; };
 		F0C0DD2E28C616D8006A69A1 /* HomeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUseCase.swift; sourceTree = "<group>"; };
 		F0C0DD3128C61DCB006A69A1 /* HomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRepository.swift; sourceTree = "<group>"; };
+		F0C0DD3528C7428F006A69A1 /* HomeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +118,7 @@
 		F0C0DC9628C21CB4006A69A1 /* Ably */ = {
 			isa = PBXGroup;
 			children = (
-				F0C0DD2A28C60DE3006A69A1 /* APIKey */,
+				F0C0DD3428C741EA006A69A1 /* Network */,
 				F0C0DCC728C2E646006A69A1 /* Resources */,
 				F0C0DCA528C21CB6006A69A1 /* Info.plist */,
 				F0C0DD2228C4E78F006A69A1 /* RealmManager */,
@@ -257,6 +259,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		F0C0DD3428C741EA006A69A1 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				F0C0DD2A28C60DE3006A69A1 /* APIKey */,
+				F0C0DD3528C7428F006A69A1 /* HomeService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -389,6 +400,7 @@
 				F0C0DC9828C21CB4006A69A1 /* AppDelegate.swift in Sources */,
 				F0C0DD2F28C616D8006A69A1 /* HomeUseCase.swift in Sources */,
 				F0C0DCB228C24265006A69A1 /* BannerView.swift in Sources */,
+				F0C0DD3628C7428F006A69A1 /* HomeService.swift in Sources */,
 				F0C0DC9A28C21CB4006A69A1 /* SceneDelegate.swift in Sources */,
 				F0C0DCC228C26216006A69A1 /* LikeViewController.swift in Sources */,
 				F0C0DCD228C42DB7006A69A1 /* LoadingView.swift in Sources */,

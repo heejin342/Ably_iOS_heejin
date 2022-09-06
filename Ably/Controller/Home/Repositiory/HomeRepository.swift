@@ -8,31 +8,42 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Moya
 
 class HomeRepository {
+    
     let disposdBag = DisposeBag()
+    private let authLookProvider = MoyaProvider<HomeSerice>()
     
     func getHomeData() -> Single<HomeModel> {
-        let resource = Resource<HomeModel>(url: URL(string: AblyKey.urlString + AblyRequest.Home.home)!)
-        
-        return Single.create { single in
-            URLRequest.load(resource: resource)
-                .subscribe(onNext: { data in
-                    single(.success(data))
-                }).disposed(by: self.disposdBag)
-            return Disposables.create {}
+        return Single<HomeModel>.create { single in
+            self.authLookProvider.request(.home) { result in
+                switch result {
+                case let .success(response):
+                    let result = try? response.map(HomeModel.self)
+                    guard let result = result else { return }
+                    return single(.success(result))
+                 case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
+             return Disposables.create {}
         }
     }
     
     func getHomeMoreGoods(params: Int) -> Single<HomeGoodsModel> {
-        let resource = Resource<HomeGoodsModel>(url: URL(string: AblyKey.urlString + AblyRequest.Home.goods + "\(params)")!)
-        
-        return Single.create { single in
-            URLRequest.load(resource: resource)
-                .subscribe(onNext: { data in
-                    single(.success(data))
-                }).disposed(by: self.disposdBag)
-            return Disposables.create {}
+        return Single<HomeGoodsModel>.create { single in
+            self.authLookProvider.request(.goodsByLastId(params)) { result in
+                switch result {
+                case let .success(response):
+                    let result = try? response.map(HomeGoodsModel.self)
+                    guard let result = result else { return }
+                    return single(.success(result))
+                 case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
+             return Disposables.create {}
         }
     }
 }

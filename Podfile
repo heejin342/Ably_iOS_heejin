@@ -11,5 +11,6 @@ target 'Ably' do
   pod 'RxCocoa'
   pod 'SDWebImage'
   pod 'RealmSwift'
+  pod 'Moya'
 
 end
