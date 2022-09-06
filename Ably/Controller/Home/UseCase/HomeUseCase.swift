@@ -28,7 +28,6 @@ class HomeUseCase {
     }
     
     func getLikedData(firstId: Int?, lastId: Int?, data: [Goods], _ complete: @escaping ([GoodsViewModel]) -> Void) {
-
         if let fId = firstId, let lId = lastId {
             self.realmManager.realmFindByRange(firstId: fId, lastId: lId) { savedData in
                let returnData = data.map { data -> GoodsViewModel in

@@ -13,11 +13,11 @@ import Moya
 class HomeRepository {
     
     let disposdBag = DisposeBag()
-    private let authLookProvider = MoyaProvider<HomeSerice>()
+    private let homeProvider = MoyaProvider<HomeSerice>()
     
     func getHomeData() -> Single<HomeModel> {
         return Single<HomeModel>.create { single in
-            self.authLookProvider.request(.home) { result in
+            self.homeProvider.request(.home) { result in
                 switch result {
                 case let .success(response):
                     let result = try? response.map(HomeModel.self)
@@ -33,7 +33,7 @@ class HomeRepository {
     
     func getHomeMoreGoods(params: Int) -> Single<HomeGoodsModel> {
         return Single<HomeGoodsModel>.create { single in
-            self.authLookProvider.request(.goodsByLastId(params)) { result in
+            self.homeProvider.request(.goodsByLastId(params)) { result in
                 switch result {
                 case let .success(response):
                     let result = try? response.map(HomeGoodsModel.self)

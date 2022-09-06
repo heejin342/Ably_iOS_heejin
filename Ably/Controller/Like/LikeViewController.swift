@@ -11,7 +11,6 @@ import RxCocoa
 import Realm
 import RealmSwift
 
-
 class LikeViewController: UIViewController {
 
     let disposeBag = DisposeBag()

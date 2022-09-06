@@ -14,7 +14,7 @@ struct Resource<T: Decodable> {
     let url: URL
 }
 
-extension URLRequest {    
+extension URLRequest {
     static func load<T>(resource: Resource<T>) -> Observable<T> {
         return Observable.just(resource.url)
             .flatMap { url -> Observable<Data> in
@@ -24,5 +24,4 @@ extension URLRequest {
                 return try JSONDecoder().decode(T.self, from: data)
             }
     }
-    
 }

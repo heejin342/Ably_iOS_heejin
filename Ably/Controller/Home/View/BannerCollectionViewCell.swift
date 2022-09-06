@@ -50,7 +50,7 @@ class BannerCollectionViewCell: UICollectionViewCell {
         pageLabelView.snp.makeConstraints {
             $0.trailing.bottom.equalToSuperview().inset(20)
             $0.height.equalTo(24)
-            $0.width.equalTo(45)
+            $0.width.equalTo(40)
         }
         pageLabelView.addSubview(pageLabel)
         pageLabel.snp.makeConstraints {

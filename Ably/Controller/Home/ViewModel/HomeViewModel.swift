@@ -31,9 +31,8 @@ class HomeViewModel {
         useCase.getHomeData()
             .subscribe(onNext: { data in
                 self.useCase.getLikedData(firstId: data.goods.first?.id, lastId: data.goods.last?.id, data: data.goods) { returnData in
-                    
                     self.goodsData.accept(returnData)
-                    
+
                     if !data.banners.isEmpty {
                         let baner = data.banners
                         var newBannerArray = baner

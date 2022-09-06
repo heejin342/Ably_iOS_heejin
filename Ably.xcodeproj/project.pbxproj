@@ -118,9 +118,9 @@
 		F0C0DC9628C21CB4006A69A1 /* Ably */ = {
 			isa = PBXGroup;
 			children = (
-				F0C0DD3428C741EA006A69A1 /* Network */,
 				F0C0DCC728C2E646006A69A1 /* Resources */,
 				F0C0DCA528C21CB6006A69A1 /* Info.plist */,
+				F0C0DD3428C741EA006A69A1 /* Network */,
 				F0C0DD2228C4E78F006A69A1 /* RealmManager */,
 				F0C0DCB528C24613006A69A1 /* Extensions */,
 				F0C0DCAE28C23182006A69A1 /* Controller */,
