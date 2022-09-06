@@ -69,6 +69,7 @@ class HomeViewController: UIViewController {
         goodsData = goodsData.map {
             if $0.id == senderData.id {
                 updatedData.isLike = !senderData.isLike
+                updatedData.createdAt = Date()
                 return updatedData
             }
             return $0

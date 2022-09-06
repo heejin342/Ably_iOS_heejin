@@ -35,7 +35,7 @@ class HomeUseCase {
                     if let likedData = savedData.first(where: { $0.id == data.id }) {
                         return GoodsViewModel(value: likedData)
                     } else {
-                        return GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false)
+                        return GoodsViewModel(id: data.id, name: data.name, image: data.image, actualPrice: data.actualPrice, price: data.price, isNew: data.isNew, sellCount: data.sellCount, isLike: false, createdAt: Date())
                     }
                 }
                 complete(returnData)

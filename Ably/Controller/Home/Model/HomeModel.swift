@@ -43,16 +43,17 @@ struct HomeGoodsModel: Codable {
 
 
 class GoodsViewModel: Object {
-    @Persisted var id: Int = -1
-    @Persisted var name: String = ""
-    @Persisted var image: String = ""
-    @Persisted var actualPrice: Int = 0
-    @Persisted var price: Int = 0
-    @Persisted var isNew: Bool = false
-    @Persisted var sellCount: Int = 0
-    @Persisted var isLike: Bool = false
+    @Persisted var id: Int
+    @Persisted var name: String
+    @Persisted var image: String
+    @Persisted var actualPrice: Int
+    @Persisted var price: Int
+    @Persisted var isNew: Bool
+    @Persisted var sellCount: Int
+    @Persisted var isLike: Bool
+    @Persisted var createdAt: Date
 
-    convenience init(id: Int, name: String, image: String, actualPrice: Int, price: Int, isNew:Bool, sellCount: Int, isLike: Bool) {
+    convenience init(id: Int, name: String, image: String, actualPrice: Int, price: Int, isNew:Bool, sellCount: Int, isLike: Bool, createdAt: Date) {
         self.init()
         self.id = id
         self.name = name
@@ -62,5 +63,6 @@ class GoodsViewModel: Object {
         self.isNew = isNew
         self.sellCount = sellCount
         self.isLike = isLike
+        self.createdAt = createdAt
     }
 }
